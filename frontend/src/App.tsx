@@ -12,7 +12,8 @@ function App() {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    axios.get<TestResponse>('http://127.0.0.1:5000/api/test')
+    const apiUrl = import.meta.env.VITE_API_URL;
+    axios.get<TestResponse>(`${apiUrl}/api/test`)
       .then(response => {
         setMessage(response.data.message);
       })
