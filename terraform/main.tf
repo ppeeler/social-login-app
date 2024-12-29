@@ -137,4 +137,20 @@ resource "aws_apprunner_service" "backend" {
       access_role_arn = aws_iam_role.app_runner_service.arn
     }
   }
+
+  environment_variables {
+    name  = "CORS_ORIGINS"
+    value = "https://ke5z4gkdqt.us-east-2.awsapprunner.com"
+  }
+
+  environment_variables {
+    name  = "FLASK_ENV"
+    value = "test"
+  }
+
+  environment_variables {
+    name = "FLASK_DEBUG"
+    value = 1
+  }
+
 }
