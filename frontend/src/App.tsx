@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div>
-      <h1>Resume App</h1>
+      <h1>Social Login App</h1>
       {message && <p>Message from backend: {message}</p>}
       {error && <p style={{color: 'red'}}>Error: {error}</p>}
     </div>
