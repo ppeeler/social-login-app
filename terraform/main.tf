@@ -83,3 +83,58 @@ resource "aws_iam_openid_connect_provider" "github" {
     "6938fd4d98bab03faadb97b34396831e3780aea1"
   ]
 }
+
+# App Runner Service Role
+resource "aws_iam_role" "app_runner_service" {
+  name = "${var.app_name}-service-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "build.apprunner.amazonaws.com"
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "app_runner_policy" {
+  role       = aws_iam_role.app_runner_service.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess"
+}
+
+resource "aws_apprunner_service" "frontend" {
+  service_name = "${var.app_name}-frontend"
+
+  source_configuration {
+    image_repository {
+      image_configuration {
+        port = "5173"
+      }
+      image_identifier      = "${aws_ecr_repository.frontend.repository_url}:latest"
+      image_repository_type = "ECR"
+    }
+    authentication_configuration {
+      access_role_arn = aws_iam_role.app_runner_service.arn
+    }
+  }
+}
+
+resource "aws_apprunner_service" "backend" {
+  service_name = "${var.app_name}-backend"
+
+  source_configuration {
+    image_repository {
+      image_configuration {
+        port = "5000"
+      }
+      image_identifier      = "${aws_ecr_repository.backend.repository_url}:latest"
+      image_repository_type = "ECR"
+    }
+    authentication_configuration {
+      access_role_arn = aws_iam_role.app_runner_service.arn
+    }
+  }
+}
