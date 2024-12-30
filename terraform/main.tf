@@ -136,6 +136,7 @@ resource "aws_apprunner_service" "backend" {
         port = "5000"
 
         runtime_environment_variables = {
+          # aws_ssm_parameter.cors_origins.value "AWS Systems Manager Parameters Store"
           CORS_ORIGINS = "https://ke5z4gkdqt.us-east-2.awsapprunner.com"
           FLASK_DEBUG = 1
           FLASK_ENV = "test"
