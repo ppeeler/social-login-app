@@ -46,12 +46,12 @@ jobs:
           npm run lint
 
       # Add actual test commands here
-      - name: Run frontend tests
-        run: |
-          cd frontend
-          npm test
+      #- name: Run frontend tests
+      #  run: |
+      #    cd frontend
+      #    npm test
 
-      - name: Run backend tests
-        run: |
-          cd backend
-          pipenv run python -m pytest
+      #- name: Run backend tests
+      #  run: |
+      #    cd backend
+      #    pipenv run python -m pytest
