@@ -1,13 +1,10 @@
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
 import globals from 'globals';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-
-const compat = new FlatCompat();
 
 export default [
   js.configs.recommended,
