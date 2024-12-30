@@ -112,11 +112,6 @@ resource "aws_apprunner_service" "frontend" {
     image_repository {
       image_configuration {
         port = "5173"
-
-        runtime_environment_variables = {
-          VITE_API_URL = "https://esn7ece6u9.us-east-2.awsapprunner.com"
-          VITE_APP_ENV = "test"
-        }
       }
       image_identifier      = "${aws_ecr_repository.frontend.repository_url}:latest"
       image_repository_type = "ECR"
@@ -137,7 +132,7 @@ resource "aws_apprunner_service" "backend" {
 
         runtime_environment_variables = {
           # aws_ssm_parameter.cors_origins.value "AWS Systems Manager Parameters Store"
-          CORS_ORIGINS = "https://ke5z4gkdqt.us-east-2.awsapprunner.com"
+          CORS_ORIGINS = "https://${aws_apprunner_service.frontend.service_url}"
           FLASK_DEBUG = 1
           FLASK_ENV = "test"
         }
@@ -148,5 +143,29 @@ resource "aws_apprunner_service" "backend" {
     authentication_configuration {
       access_role_arn = aws_iam_role.app_runner_service.arn
     }
+  }
+}
+
+resource "null_resource" "update_env_vars" {
+  depends_on = [aws_apprunner_service.frontend, aws_apprunner_service.backend]
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      aws apprunner update-service \
+        --service-arn ${aws_apprunner_service.frontend.arn} \
+        --source-configuration '{
+          "ImageRepository": {
+            "ImageConfiguration": {
+              "RuntimeEnvironmentVariables": {
+                "VITE_API_URL": "https://${aws_apprunner_service.backend.service_url}",
+                "VITE_APP_ENV": "test"
+              }
+            }
+          },
+          "AuthenticationConfiguration": {
+            "AccessRoleArn": "${aws_iam_role.app_runner_service.arn}"
+          }
+        }'
+    EOT
   }
 }
