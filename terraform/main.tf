@@ -112,6 +112,11 @@ resource "aws_apprunner_service" "frontend" {
     image_repository {
       image_configuration {
         port = "5173"
+
+        runtime_environment_variables = {
+          VITE_API_URL = "https://esn7ece6u9.us-east-2.awsapprunner.com:5000"
+          VITE_APP_ENV = "test"
+        }
       }
       image_identifier      = "${aws_ecr_repository.frontend.repository_url}:latest"
       image_repository_type = "ECR"
@@ -129,6 +134,12 @@ resource "aws_apprunner_service" "backend" {
     image_repository {
       image_configuration {
         port = "5000"
+
+        runtime_environment_variables = {
+          CORS_ORIGINS = "https://ke5z4gkdqt.us-east-2.awsapprunner.com"
+          FLASK_DEBUG = 1
+          FLASK_ENV = "test"
+        }
       }
       image_identifier      = "${aws_ecr_repository.backend.repository_url}:latest"
       image_repository_type = "ECR"
@@ -137,20 +148,4 @@ resource "aws_apprunner_service" "backend" {
       access_role_arn = aws_iam_role.app_runner_service.arn
     }
   }
-
-  environment_variables {
-    name  = "CORS_ORIGINS"
-    value = "https://ke5z4gkdqt.us-east-2.awsapprunner.com"
-  }
-
-  environment_variables {
-    name  = "FLASK_ENV"
-    value = "test"
-  }
-
-  environment_variables {
-    name = "FLASK_DEBUG"
-    value = 1
-  }
-
 }
