@@ -114,7 +114,7 @@ resource "aws_apprunner_service" "frontend" {
         port = "5173"
 
         runtime_environment_variables = {
-          VITE_API_URL = "https://esn7ece6u9.us-east-2.awsapprunner.com:5000"
+          VITE_API_URL = "https://esn7ece6u9.us-east-2.awsapprunner.com"
           VITE_APP_ENV = "test"
         }
       }

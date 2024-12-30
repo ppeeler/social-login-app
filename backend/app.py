@@ -10,7 +10,10 @@ CORS(app, origins=os.getenv('CORS_ORIGINS').split(','))
 
 @app.route('/api/test', methods=['GET'])
 def test_route():
-    return jsonify({"message": "Backend is working!"})
+    app.logger.info('Test route called')
+    response = {"message": "Backend is working!"}
+    app.logger.info(f'Returning response: {response}')
+    return jsonify(response)
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))

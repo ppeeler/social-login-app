@@ -13,11 +13,17 @@ function App() {
 
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_API_URL;
+
+    console.log('Attempting to connect to:', apiUrl);
+
     axios.get<TestResponse>(`${apiUrl}/api/test`)
       .then(response => {
+        console.log('Response received:', response);
         setMessage(response.data.message);
       })
       .catch(error => {
+        console.error('Full error object:', error);
+        
         if (axios.isAxiosError(error)) {
           if (error.response) {
             setError(`Server error: ${error.response.status}`);
