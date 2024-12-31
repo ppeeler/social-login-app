@@ -25,10 +25,3 @@ services:
       - VITE_LOG_LEVEL=${LOG_LEVEL:-info}  
     depends_on:
       - backend
-
-  localstack:
-    image: localstack/localstack
-    ports:
-      - "4566:4566"
-    environment:
-      - SERVICES=cognito
