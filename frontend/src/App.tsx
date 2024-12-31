@@ -19,6 +19,8 @@ function App() {
   const [error, setError] = useState<string>('');
   const [user, setUser] = useState<GoogleUser | null>(null);
 
+  console.log('IN APP!!');
+
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
