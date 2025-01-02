@@ -1,0 +1,27 @@
+stateDiagram-v2
+    [*] --> Login
+    Login: Social Login App
+    Login: - Login with Google button
+
+    Login --> Dashboard: Google Login
+    Dashboard: Hello, {name}
+    Dashboard: - Tell me your favorite color button
+    Dashboard: - Logout button
+
+    Dashboard --> ColorSelect: Click color button
+    ColorSelect: Color Selection
+    ColorSelect: - Color picker/dropdown
+    ColorSelect: - Submit button
+    ColorSelect: - Cancel button
+
+    ColorSelect --> ColorPage: Submit color
+    ColorSelect --> Dashboard: Cancel
+
+    ColorPage: Hello, {name}
+    ColorPage: Your favorite color is {color}
+    ColorPage: - "No it's not" button
+    ColorPage: - Logout button
+
+    ColorPage --> Dashboard: Click "No it's not"
+    ColorPage --> Login: Logout
+    Dashboard --> Login: Logout

@@ -167,34 +167,23 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h1>Social Login App</h1>
       {message && <p>Message from backend: {message}</p>}
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-
+  
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         {!user ? (
-          <GoogleLogin
-            onSuccess={handleSuccess}
-            onError={() => setError('Login Failed')}
-          />
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <GoogleLogin
+              onSuccess={handleSuccess}
+              onError={() => setError('Login Failed')}
+            />
+          </div>
         ) : (
           <div>
             <h2>Welcome, {user.name}!</h2>
-            <button
-              onClick={handleLogout}
-              style={{
-                marginTop: '1rem',
-                padding: '0.5rem 1rem',
-                backgroundColor: '#4287f5',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              Logout
-            </button>
+            <button onClick={handleLogout}>Logout</button>
           </div>
         )}
       </GoogleOAuthProvider>
