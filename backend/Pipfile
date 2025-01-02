@@ -9,6 +9,7 @@ flask-cors = "*"
 python-dotenv = "*"
 google-auth = "*"
 requests = "*"
+pyjwt = "*"
 
 [dev-packages]
 
