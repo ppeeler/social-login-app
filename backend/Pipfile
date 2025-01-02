@@ -6,10 +6,11 @@ name = "pypi"
 [packages]
 flask = "*"
 flask-cors = "*"
-python-dotenv = "*"
 google-auth = "*"
 requests = "*"
 pyjwt = "*"
+boto3 = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

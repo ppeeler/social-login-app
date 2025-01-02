@@ -28,6 +28,9 @@ node_modules/
 .DS_Store
 
 # Terraform
-terraform/.terraform/
+**/.terraform/
 terraform/*.tfstate
 terraform/*.tfstate.*
+
+# Localstack
+localstack-data/
