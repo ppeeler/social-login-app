@@ -31,6 +31,8 @@ def test_route():
 
 @app.route('/api/auth/google', methods=['POST', 'OPTIONS'])
 def google_auth():
+    app.logger.info('Google auth called')
+
     if request.method == 'OPTIONS':
         return '', 204
     if not request.is_json:
@@ -65,6 +67,8 @@ def google_auth():
 # Add refresh endpoint
 @app.route('/api/auth/refresh', methods=['POST'])
 def refresh_token():
+    app.logger.info('Token refresh called')
+
     token = request.headers.get('Authorization')
     if not token or not token.startswith('Bearer '):
         return jsonify({'error': 'No token provided'}), 401
