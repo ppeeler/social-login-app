@@ -2,11 +2,19 @@ from flask import Blueprint, jsonify, request, current_app
 import boto3
 from datetime import datetime
 import os
+from botocore.config import Config
 
 users_bp = Blueprint('users', __name__)
 
 # Initialize DynamoDB client
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb',
+    endpoint_url=os.getenv('DYNAMODB_ENDPOINT_URL'),
+    region_name=os.getenv('AWS_DEFAULT_REGION'),
+    aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+    config=Config(retries={'max_attempts': 5})
+)
+
 users_table = dynamodb.Table(os.getenv('DYNAMODB_TABLE_NAME'))
 
 @users_bp.route('/user', methods=['POST'])
@@ -62,7 +70,6 @@ def find_or_create_user():
             'error': 'Database operation failed'
         }), 500
 
-# Optional: Add a route to get user by email
 @users_bp.route('/user/<email>', methods=['GET'])
 def get_user(email):
     current_app.logger.info(f'Get user called for email: {email}')

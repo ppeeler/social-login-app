@@ -18,51 +18,6 @@ function App() {
   const [error, setError] = useState<string>('');
   const [user, setUser] = useState<GoogleUser | null>(null);
 
-  // check to see if there's a live token in local storage
-  useEffect(() => {
-    console.log("looking for credentials in local storage");
-    const googleCredential = localStorage.getItem('googleCredential');
-
-    if (googleCredential) {
-
-      console.log("found credentials in local storage");
-
-      try {
-        const decoded = jwtDecode<GoogleUser>(googleCredential);
-
-        console.log("checking if credentials are expired");
-        // Check if token is expired
-        const currentTime = Math.floor(Date.now() / 1000);
-        if (decoded.exp && decoded.exp < currentTime) {
-          console.log("credentials are expired");
-          handleLogout();
-          return;
-        }
-
-        console.log("credentials are not expired");
-        setUser(decoded);
-
-        console.log("getting access token from local storage");
-        const accessToken = localStorage.getItem('accessToken');
-        
-        if (accessToken) {
-          console.log("found access token in local storage, setting header");
-          axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        } else {
-          console.log("no access token found in local storage");
-          handleLogout();
-        }
-      } catch (error) {
-        console.error("error looking for local credentials: " + error);
-        localStorage.removeItem('googleCredential');
-        localStorage.removeItem('accessToken');
-        delete axios.defaults.headers.common['Authorization'];
-      }
-    } else {
-      console.log("no credentials found in local storage");
-    }
-  }, []);
-
   useEffect(() => {
     // Add response interceptor for 401 errors
     const interceptor = axios.interceptors.response.use(
@@ -121,6 +76,53 @@ function App() {
       });
   }, []);
 
+  // check to see if there's a live token in local storage
+  useEffect(() => {
+    console.log("looking for credentials in local storage");
+    const googleCredential = localStorage.getItem('googleCredential');
+
+    if (googleCredential) {
+
+      console.log("found credentials in local storage");
+
+      try {
+        const decoded = jwtDecode<GoogleUser>(googleCredential);
+
+        console.log("checking if credentials are expired");
+        // Check if token is expired
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (decoded.exp && decoded.exp < currentTime) {
+          console.log("credentials are expired");
+          handleLogout();
+          return;
+        }
+
+        console.log("credentials are not expired");
+        setUser(decoded);
+
+        console.log("getting access token from local storage");
+        const accessToken = localStorage.getItem('accessToken');
+        
+        if (accessToken) {
+          console.log("found access token in local storage, setting header");
+          axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        } else {
+          console.log("no access token found in local storage");
+          handleLogout();
+        }
+      } catch (error) {
+        console.error("error looking for local credentials: " + error);
+        localStorage.removeItem('googleCredential');
+        localStorage.removeItem('accessToken');
+        delete axios.defaults.headers.common['Authorization'];
+      }
+    } else {
+      console.log("no credentials found in local storage");
+    }
+  }, []);
+
+
+
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     try {
 
@@ -135,20 +137,30 @@ function App() {
 
       console.log("calling backed with google credentials");
       const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.post(`${apiUrl}/api/auth/google`, {
+
+      // authenticate with google
+      const authResponse = await axios.post(`${apiUrl}/api/auth/google`, {
         token: credentialResponse.credential
       });
 
-      if (response.data.success) {
+      if (authResponse.data.success) {
         // Handle successful authentication (e.g., store token)
-        console.log('Authentication successful');
-
-        // Store the access token from your backend
-        console.log("putting access token in local storage");
-        localStorage.setItem('accessToken', response.data.accessToken);
+        console.log('Authentication successful, putting access token in local storage');
+        const { accessToken, user: authUser } = authResponse.data;
+        localStorage.setItem('accessToken', accessToken);
 
         // Configure axios to use the token
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+        // Create or fetch user record
+        const userResponse = await axios.post(`${apiUrl}/api/user`, {
+          email: authUser.email,
+          name: authUser.name
+        });
+
+        if (!userResponse.data.success) {
+          throw new Error('Failed to create/fetch user record');
+        }
       }
     } catch (error) {
       console.error('Auth error:', error);
