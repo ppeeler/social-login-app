@@ -96,3 +96,47 @@ def get_user(email):
             'success': False,
             'error': 'Database operation failed'
         }), 500
+    
+@users_bp.route('/user/color', methods=['POST'])
+def update_favorite_color():
+    current_app.logger.info('Update favorite color called')
+    
+    if not request.is_json:
+        return jsonify({'error': 'Content-Type must be application/json'}), 415
+    
+    data = request.json
+    email = data.get('email')
+    color = data.get('color')
+    
+    if not email or not color:
+        return jsonify({
+            'success': False,
+            'error': 'Missing required fields'
+        }), 400
+    
+    try:
+        # Update user with new color
+        response = users_table.update_item(
+            Key={'email': email},
+            UpdateExpression='SET favoriteColor = :color',
+            ExpressionAttributeValues={':color': color},
+            ReturnValues='ALL_NEW'
+        )
+        
+        if 'Attributes' in response:
+            return jsonify({
+                'success': True,
+                'user': response['Attributes']
+            })
+        
+        return jsonify({
+            'success': False,
+            'error': 'User not found'
+        }), 404
+        
+    except Exception as e:
+        current_app.logger.error(f'DynamoDB error: {str(e)}')
+        return jsonify({
+            'success': False,
+            'error': 'Database operation failed'
+        }), 500

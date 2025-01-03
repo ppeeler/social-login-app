@@ -14,13 +14,6 @@ CORS(app, origins=os.getenv('CORS_ORIGINS').split(','))
 app.register_blueprint(auth_bp, url_prefix='/api')
 app.register_blueprint(users_bp, url_prefix='/api')
 
-@app.route('/api/test', methods=['GET'])
-def test_route():
-    app.logger.info('Test route called')
-    response = {"message": "Backend is working!"}
-    app.logger.info(f'Returning response: {response}')
-    return jsonify(response)
-
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     host = os.getenv('HOST', '0.0.0.0')

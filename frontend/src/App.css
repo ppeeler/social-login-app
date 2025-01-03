@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -39,4 +41,103 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Color Picker Styles */
+.color-picker-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.color-input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.color-input {
+  width: 100px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.button-group button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button-group .submit-button {
+  background-color: #646cff;
+  color: white;
+}
+
+.button-group .submit-button:hover {
+  background-color: #5158cc;
+}
+
+.button-group .cancel-button {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.button-group .cancel-button:hover {
+  background-color: #e5e5e5;
+}
+
+.color-display {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.color-swatch {
+  width: 50px;
+  height: 50px;
+  margin: 10px auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.error-message {
+  color: #dc2626;
+  margin: 10px 0;
+  font-size: 0.9em;
+}
+
+/* User Container Styles */
+.user-container {
+  margin-top: 20px;
+}
+
+.logout-button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #dc2626;
 }

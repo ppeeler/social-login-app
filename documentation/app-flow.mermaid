@@ -1,27 +1,59 @@
 stateDiagram-v2
     [*] --> Login
-    Login: Social Login App
-    Login: - Login with Google button
-
-    Login --> Dashboard: Google Login
-    Dashboard: Hello, {name}
-    Dashboard: - Tell me your favorite color button
-    Dashboard: - Logout button
-
+    
+    state Login {
+        [*] --> GoogleButton
+        GoogleButton: Login with Google button
+    }
+    
+    state UserCheck {
+        [*] --> CheckExisting
+        CheckExisting: User exists?
+    }
+    
+    state ColorCheck {
+        [*] --> CheckColor
+        CheckColor: Has favorite color?
+    }
+    
+    state CreateUser {
+        [*] --> NewUser
+        NewUser: Create new user record
+        NewUser: Store Google profile info
+    }
+    
+    state Dashboard {
+        [*] --> Actions
+        Actions: Hello, {name}
+        Actions: - Tell me your favorite color button
+        Actions: - Logout button
+    }
+    
+    state ColorSelect {
+        [*] --> ColorOptions
+        ColorOptions: Color Selection
+        ColorOptions: - Color picker/dropdown
+        ColorOptions: - Submit button
+        ColorOptions: - Cancel button
+    }
+    
+    state ColorPage {
+        [*] --> ColorDisplay
+        ColorDisplay: Hello, {name}
+        ColorDisplay: Your favorite color is {color}
+        ColorDisplay: - "No it's not" button
+        ColorDisplay: - Logout button
+    }
+    
+    Login --> UserCheck: Google Login
+    UserCheck --> CreateUser: No
+    CreateUser --> Dashboard: User Created
+    UserCheck --> ColorCheck: Yes
+    ColorCheck --> Dashboard: No
+    ColorCheck --> ColorPage: Yes
     Dashboard --> ColorSelect: Click color button
-    ColorSelect: Color Selection
-    ColorSelect: - Color picker/dropdown
-    ColorSelect: - Submit button
-    ColorSelect: - Cancel button
-
     ColorSelect --> ColorPage: Submit color
     ColorSelect --> Dashboard: Cancel
-
-    ColorPage: Hello, {name}
-    ColorPage: Your favorite color is {color}
-    ColorPage: - "No it's not" button
-    ColorPage: - Logout button
-
     ColorPage --> Dashboard: Click "No it's not"
     ColorPage --> Login: Logout
     Dashboard --> Login: Logout
