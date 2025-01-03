@@ -35,7 +35,7 @@ services:
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - LAMBDA_EXECUTOR=docker
+      - LAMBDA_PROVIDER=lambda-v2
       - PERSISTENCE=1
     volumes:
       - "./localstack-data:/var/lib/localstack"

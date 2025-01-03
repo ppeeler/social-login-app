@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant U as User
+    participant A as App
+    participant G as Google OAuth
+    participant D as DynamoDB
+
+    %% Authentication Phase
+    U->>A: Access App
+    A->>G: Redirect to Google OAuth
+    G->>U: Request Sign In
+    U->>G: Authenticate
+    G->>A: Return Auth Token + Email
+
+    %% Database Operations Phase
+    A->>D: Query User by Email
+    
+    alt User Exists
+        D->>A: Return User Record
+    else User Not Found
+        A->>D: Create New User Record
+        D->>A: Return New User Record
+    end

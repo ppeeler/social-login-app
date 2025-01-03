@@ -8,9 +8,9 @@ flask = "*"
 flask-cors = "*"
 google-auth = "*"
 requests = "*"
+python-dotenv = "*"
 pyjwt = "*"
 boto3 = "*"
-python-dotenv = "*"
 
 [dev-packages]
 
