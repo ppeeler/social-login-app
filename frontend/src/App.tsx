@@ -226,7 +226,7 @@ function App() {
                   className="color-swatch"
                   style={{ backgroundColor: userData.favoriteColor }}
                 />
-                <p>{getColorName(userData.favoriteColor).name}</p>
+                <p>{getColorName(userData.favoriteColor)?.name}</p>
                 <button onClick={() => setShowColorPicker(true)}>
                   Change Color
                 </button>

@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useRef, MouseEvent, useCallback } from 'react';
 import axios from 'axios';
-
-interface User {
-  email: string;
-  favoriteColor?: string;
-}
+import { User } from './types';
 
 interface ColorPickerProps {
   user: User;
-  onColorUpdate: (user: User) => void;
+  onColorUpdate: (user: User) => void; 
   onCancel: () => void;
 }
 
