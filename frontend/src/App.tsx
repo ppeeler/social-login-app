@@ -171,7 +171,11 @@ function App() {
           if (!userResponse.success) {
             throw new Error('Failed to create/fetch user record');
           }
-          setUserData(userResponse.user);
+          if (userResponse.user) {
+            setUserData(userResponse.user);
+          } else {
+            setUserData(null);
+          }
         } catch (error) {
           console.error('Error fetching user data:', error);
           setError(api.handleApiError(error));
