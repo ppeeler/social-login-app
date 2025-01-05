@@ -8,6 +8,10 @@ terraform {
  }
 }
 
+variable "domain" {
+  type = string
+}
+
 module "shared" {
   source = "../shared"
 }
@@ -99,7 +103,7 @@ resource "aws_apprunner_service" "backend" {
 
         runtime_environment_variables = {
           # aws_ssm_parameter.cors_origins.value "AWS Systems Manager Parameters Store"
-          CORS_ORIGINS = "https://${aws_apprunner_service.frontend.service_url}"
+          CORS_ORIGINS = "https://${aws_apprunner_service.frontend.service_url},https://${var.domain}"
           FLASK_DEBUG = 1
           FLASK_ENV = "test"
         }
@@ -124,7 +128,7 @@ resource "null_resource" "update_env_vars" {
           "ImageRepository": {
             "ImageConfiguration": {
               "RuntimeEnvironmentVariables": {
-                "VITE_API_URL": "https://${aws_apprunner_service.backend.service_url}",
+                "VITE_API_URL": "https://${aws_apprunner_service.backend.service_url},https://${var.domain}",
                 "VITE_APP_ENV": "test"
               }
             }
