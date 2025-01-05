@@ -80,6 +80,8 @@ resource "aws_apprunner_service" "frontend" {
   service_name = "${module.shared.app_name}-frontend"
 
   source_configuration {
+    auto_deployments_enabled = true
+
     image_repository {
       image_configuration {
         port = "5173"
@@ -97,6 +99,8 @@ resource "aws_apprunner_service" "backend" {
   service_name = "${module.shared.app_name}-backend"
 
   source_configuration {
+    auto_deployments_enabled = true
+
     image_repository {
       image_configuration {
         port = "5000"
@@ -126,10 +130,13 @@ resource "null_resource" "update_env_vars" {
         --service-arn ${aws_apprunner_service.frontend.arn} \
         --source-configuration '{
           "ImageRepository": {
+            "ImageIdentifier": "${aws_ecr_repository.frontend.repository_url}:latest",
+            "ImageRepositoryType": "ECR",
             "ImageConfiguration": {
               "RuntimeEnvironmentVariables": {
-                "VITE_API_URL": "https://${aws_apprunner_service.backend.service_url},https://${var.domain}",
-                "VITE_APP_ENV": "test"
+                "VITE_API_URL": "https://${aws_apprunner_service.backend.service_url}",
+                "VITE_APP_ENV": "test",
+                "VITE_ENABLE_HMR": "false"
               }
             }
           },
