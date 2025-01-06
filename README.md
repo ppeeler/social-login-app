@@ -6,10 +6,10 @@ Somewhat arbitrarily I decided I wanted to foist authentication off on Google, w
 through a bunch of hoops to ensure you're not just some rando using their service for a toy project. So maybe don't use that if it's not something you really need.
 
 ## Other arbitrary rules:
-1. I wanted to mostly use tools I'd used before, but not the tools I was most comfortable with.
+1. I wanted to use mostly tools I'd used before, but not the tools I was most comfortable with.
 2. I wanted to minimize my use of the AWS console and use IaC (specifically terraform) wherever possible.
-3. I wanted a containerized application (with a faint notion that test project 2 would be "convert it to serverless").
-
+3. I wanted to run containers in AppRunner to see what I'd lose vs k8s (other than a lot of headaches).
+   
 The 5-minute flow I scratched out looked like this:
 
 ```mermaid
